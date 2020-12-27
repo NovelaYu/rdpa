@@ -18,8 +18,10 @@ public class HttpService {
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .readTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
-                .sslSocketFactory(new SSLSocketClient().getSSLSocketFactory())//配置
-                .hostnameVerifier(new SSLSocketClient().getHostnameVerifier())//配置    //忽略验证证书
+                /**配置**/
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                /**忽略验证证书**/
+                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                 .build();
         FormBody.Builder form = new FormBody.Builder();
         //DeliveryReceipt deliveryReceipt = (DeliveryReceipt)object;
