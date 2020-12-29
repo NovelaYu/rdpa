@@ -121,7 +121,7 @@ public class BaseUtils {
             //JSONObject jsonData = jsonObject.getJSONObject("Data");
             try {
                 Assert.assertNotEquals("0",jsonObject.get("Code"));
-                Assert.assertEquals(true,jsonObject.get("false"));
+                Assert.assertNotEquals(true,jsonObject.get("Success"));
                 //Assert.assertNull(jsonData.getString("Rows"));
             } catch (Throwable e) {
                 /**补货失败异常**/

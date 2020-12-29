@@ -53,7 +53,7 @@ public class SendReceiptInfoListApiOnlineTest {
         sendReceipt.setProjectSysNoList(list);
 
         String currentmethod = Thread.currentThread().getStackTrace()[1].getMethodName();
-        baseUtils.assertNullResult(sendReceipt,method,currentmethod);
+        baseUtils.assertExitResult(sendReceipt,method,currentmethod);
 
 
     }

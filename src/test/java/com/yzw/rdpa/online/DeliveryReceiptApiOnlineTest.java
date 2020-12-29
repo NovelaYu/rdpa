@@ -32,7 +32,7 @@ public class DeliveryReceiptApiOnlineTest {
         String reportPath = "reports/"+className+".html";
         extent = new ExtentReports(reportPath, true, NetworkMode.OFFLINE);
         baseUtils = new BaseUtils(extent);
-        System.out.println("子类后执行");
+        //System.out.println("子类后执行");
     }
 
     @AfterClass
@@ -156,7 +156,7 @@ public class DeliveryReceiptApiOnlineTest {
         DeliveryReceipt deliveryReceipt = DeliveryReceipt.getDeliveryReceipt(true);
         deliveryReceipt.setPageIndex(101);
         String currentmethod = Thread.currentThread().getStackTrace()[1].getMethodName();
-        baseUtils.assertExitResult(deliveryReceipt,method,currentmethod);
+        baseUtils.assertNullResult(deliveryReceipt,method,currentmethod);
 
     }
 

@@ -51,7 +51,7 @@ public class ReceiveReceiptInfoApiOnlineTest {
         list.add(1);
         receiveReceipt.setProjectSysNoList(list);
         String currentmethod = Thread.currentThread().getStackTrace()[1].getMethodName();
-        baseUtils.assertNullResult(receiveReceipt,method,currentmethod);
+        baseUtils.assertExitResult(receiveReceipt,method,currentmethod);
 
     }
 
@@ -78,7 +78,7 @@ public class ReceiveReceiptInfoApiOnlineTest {
         ReceiveReceipt receiveReceipt = ReceiveReceipt.getReceiveReceipt(true);
         receiveReceipt.setSupplierName("1212");
         String currentmethod = Thread.currentThread().getStackTrace()[1].getMethodName();
-        baseUtils.assertExitResult(receiveReceipt,method,currentmethod);
+        baseUtils.assertNullResult(receiveReceipt,method,currentmethod);
 
     }
 
