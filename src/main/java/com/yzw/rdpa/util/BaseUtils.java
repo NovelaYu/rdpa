@@ -52,6 +52,7 @@ public class BaseUtils {
         test.log(LogStatus.FAIL, "传入参数:"+ input);
         test.log(LogStatus.FAIL,"传出参数:" + output);
         flushReports(extent,test);
+        Assert.fail();
     }
 
     public void error(ExtentReports extent, String method,String input,String output) {
@@ -59,6 +60,7 @@ public class BaseUtils {
         test.log(LogStatus.ERROR, "传入参数:"+ input);
         test.log(LogStatus.ERROR,"传出参数:" + output);
         flushReports(extent,test);
+        Assert.fail();
     }
 
     /**返回参数存在**/
