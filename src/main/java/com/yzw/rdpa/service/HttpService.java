@@ -6,11 +6,19 @@ import com.yzw.rdpa.entity.Sign;
 import com.yzw.rdpa.util.ObjectToString;
 import com.yzw.rdpa.util.SSLSocketClient;
 import okhttp3.*;
+import org.omg.CORBA.Environment;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class HttpService {
+
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    /**传入form 表单**/
+    @Deprecated
     public static Response exceHttp(Object object,String method) {
         Sign sign = Sign.getSign();
         sign.setMethod(method);
@@ -24,7 +32,6 @@ public class HttpService {
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                 .build();
         FormBody.Builder form = new FormBody.Builder();
-        //DeliveryReceipt deliveryReceipt = (DeliveryReceipt)object;
         form.add("appid",sign.getAppid());
         form.add("data", JSONObject.toJSONString(object));
         form.add("format",sign.getFormat());
@@ -34,6 +41,8 @@ public class HttpService {
         form.add("version",sign.getVersion());
         form.add("sign", ObjectToString.objcetToString(object,sign));
         /**预发环境url**/
+        /*String url = "https://api.jc.yzw.cn:8081/open.api";*/
+        /**正式环境**/
         String url = "https://api.jc.yzw.cn:8081/open.api";
         Request request = new Request.Builder()
                 .url(url)
@@ -44,11 +53,134 @@ public class HttpService {
         Call call = client.newCall(request);
         Response response = null;
         try {
+            /**同步调用
+             * 异步 all.enqueue(new Callback() {}
+             * 同步哦 new callback 执行回调
+             * **/
             response = call.execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return response;
     }
+
+
+    /**传入json数据**/
+    public static Response exceJsonHttp(String json,String method,String url) {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                /**配置**/
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                /**忽略验证证书**/
+                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+                .build();
+
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Content-Type","application/x-www-form-urlencoded")
+                .post(body)
+                .build();
+
+        Call call = client.newCall(request);
+        Response response = null;
+        try {
+            /**同步调用
+             * 异步 all.enqueue(new Callback() {}
+             * 同步哦 new callback 执行回调
+             * **/
+            response = call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    /**传入From 表单数据**/
+    public static Response exceFromBodyHttp(HashMap<String,String> map, String method, String url) {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                /**配置**/
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                /**忽略验证证书**/
+                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+                .build();
+
+        FormBody.Builder form = new FormBody.Builder();
+
+        /**循环获取map表单中值**/
+        for (String key : map.keySet()) {
+            form.add(key,map.get(key));
+        }
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Content-Type","application/x-www-form-urlencoded")
+                .post(form.build())
+                .build();
+        Call call = client.newCall(request);
+        Response response = null;
+        try {
+            /**同步调用
+             * 异步 call.enqueue(new Callback() {}
+             * 同步哦 new callback 执行回调
+             * **/
+            response = call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+
+    /***文件上传**/
+    //todo
+    public static Response execFileHttp(String url) {
+        File file=new File("Environment.getExternalStorageDirectory()", "balabala.png");
+        MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        RequestBody filebody = MultipartBody.create(MEDIA_TYPE_PNG, file);
+        MultipartBody.Builder multiBuilder=new MultipartBody.Builder();
+        //这里是 封装上传图片参数
+        multiBuilder.addFormDataPart("file", file.getName(), filebody);
+        //参数以添加header方式将参数封装，否则上传参数为空
+        // 设置请求体
+        multiBuilder.setType(MultipartBody.FORM);
+        //这里是 封装上传图片参数
+        multiBuilder.addFormDataPart("file", file.getName(), filebody);
+        // 封装请求参数,这里最重要
+        HashMap<String, String> params = new HashMap<>();
+        params.put("client","Android");
+        params.put("uid","1061");
+        params.put("token","1911173227afe098143caf4d315a436d");
+        params.put("uuid","A000005566DA77");
+        //参数以添加header方式将参数封装，否则上传参数为空
+        if (params != null && !params.isEmpty()) {
+            for (String key : params.keySet()) {
+                multiBuilder.addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"" + key + "\""),
+                        RequestBody.create(null, params.get(key)));
+            }
+        }
+        RequestBody multiBody=multiBuilder.build();
+        OkHttpClient okHttpClient=new OkHttpClient();
+        Request request=new   Request.Builder().url(url).post(multiBody).build();
+        Call call=okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                //请求失败的处理
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+            }
+        });
+
+        return null;
+    }
+
 
 }
