@@ -58,15 +58,21 @@
 
         <!--ExtentReports 生成测试报告-->
         <dependency>
-            <groupId>com.relevantcodes</groupId>
+            <groupId>com.aventstack</groupId>
             <artifactId>extentreports</artifactId>
-            <version>2.41.2</version>
+            <version>3.0.3</version>
         </dependency>
         <!--junit 包-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+        </dependency>
+        <!--testNg 包-->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.0.0</version>
         </dependency>
 
     </dependencies>
@@ -77,6 +83,36 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!--启动单元测试插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19</version>
+                <configuration>
+                  <!--  通过mvn 运行工程下的目录，但是不能指定包
+                     <excludes>
+                        <exclude>**/DeliveryReceiptApiOnlineTest.java</exclude>
+                    </excludes>-->
+
+                   <!--通过maven 运行工程主目录路径下的testng.xml 指定包运行-->
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src\\test\\resources\\testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <!--测试遇到错误不停止编译-->
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <!--解决输出报告中文乱码问题-->
+                    <forkMode>once</forkMode>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                    <systemProperties>
+                        <property>
+                            <name>net.sourceforge.cobertura.datafile</name>
+                            <value>target/cobertura/cobertura.ser</value>
+                        </property>
+                    </systemProperties>
+
+                </configuration>
+
             </plugin>
         </plugins>
     </build>
