@@ -29,7 +29,7 @@ public class ReportTest01 {
     @BeforeClass
     public static void beforeClass() {
         String className = Thread.currentThread().getStackTrace()[1].getClassName();
-        String reportPath = "reports/"+className+".html";
+        String reportPath = "target/reports/"+className+".html";
         extent = new ExtentReports(reportPath, true, NetworkMode.OFFLINE);
         baseUtils = new BaseUtils(extent);
         System.out.println("子类后执行");

@@ -48,6 +48,7 @@ public class BaseUtils {
     }
 
     public void fail(ExtentReports extent, String method,String input,String output) {
+        Assert.fail();
         ExtentTest test = getExtenTest(extent,method);
         test.log(LogStatus.FAIL, "传入参数:"+ input);
         test.log(LogStatus.FAIL,"传出参数:" + output);
@@ -56,6 +57,7 @@ public class BaseUtils {
     }
 
     public void error(ExtentReports extent, String method,String input,String output) {
+        Assert.fail();
         ExtentTest test = getExtenTest(extent,method);
         test.log(LogStatus.ERROR, "传入参数:"+ input);
         test.log(LogStatus.ERROR,"传出参数:" + output);
