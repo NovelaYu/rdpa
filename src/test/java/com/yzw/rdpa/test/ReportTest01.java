@@ -1,43 +1,30 @@
 package com.yzw.rdpa.test;
 
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.NetworkMode;
-
 import com.yzw.rdpa.RdpaApplication;
 import com.yzw.rdpa.entity.DeliveryReceipt;
-import com.yzw.rdpa.util.BaseUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import com.yzw.rdpa.assertUtil.OpenApiUtils;
+
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.BeforeClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes= RdpaApplication.class)
-public class ReportTest01 {
+public class ReportTest01 extends AbstractTestNGSpringContextTests {
 
-    private static ExtentReports extent;
+    //private static ExtentReports extent;
 
     /**生成测试报告**/
 
-    private static BaseUtils baseUtils;
+    private static OpenApiUtils openAPiUtils;
 
     @BeforeClass
     public static void beforeClass() {
-        String className = Thread.currentThread().getStackTrace()[1].getClassName();
-        String reportPath = "target/reports/"+className+".html";
-        extent = new ExtentReports(reportPath, true, NetworkMode.OFFLINE);
-        baseUtils = new BaseUtils(extent);
-        System.out.println("子类后执行");
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        extent.close();
+        openAPiUtils = new OpenApiUtils();
     }
 
 
@@ -54,7 +41,6 @@ public class ReportTest01 {
 
         /**输出测试报告**/
         String method = Thread.currentThread().getStackTrace()[1].getMethodName();
-        //succeed(extent,method,deliveryReceipt.toString(),"success");
 
     }
 

@@ -1,44 +1,55 @@
 package com.yzw.rdpa.util;
 
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
-import com.relevantcodes.extentreports.LogStatus;
-import com.relevantcodes.extentreports.model.Log;
 import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 
 public class ExtentUtils extends TestWatcher {
 
-    private ExtentReports extent;
-    //private Object object;
+/*    private ExtentReports extent;
+
 
     public ExtentUtils(ExtentReports extent) {
         this.extent = extent;
-        //this.object = object;
+
     }
 
-    @Override
-    protected void succeeded(Description description) {
-        ExtentTest test = extent.startTest(description.getDisplayName(), "-");
-
+    *//**获取扩展日志**//*
+    public ExtentTest getExtenTest(ExtentReports extent, String method, String description) {
+        ExtentTest test = extent.startTest(method, "测试"+description);
         test.log(LogStatus.PASS,"开始测试");
-        //test.log(LogStatus.PASS, object.toString());
-        flushReports(extent, test);
+        return test;
     }
 
-    @Override
-    protected void failed(Throwable e, Description description) {
-        ExtentTest test = extent.startTest(description.getDisplayName(), "Test failed");
 
-        // step log
-        test.log(LogStatus.FAIL, e);
-        flushReports(extent, test);
-    }
-
-    private void flushReports(ExtentReports extent, ExtentTest test){
-        // ending test
+    *//**关闭日志**//*
+ *//*   public void flushReports(ExtentReports extent,ExtentTest test){
+        test.log(Status.PASS,"测试完成");
         extent.endTest(test);
-        // writing everything to document
         extent.flush();
+    }*//*
+
+    *//**成功写入日志**//*
+    public void succeed(ExtentReports extent, String method, String input, String output, String description) {
+       // ExtentTest test = getExtenTest(extent,method,description);
+        test.log(LogStatus.PASS, "传入参数:"+ input);
+        test.log(LogStatus.PASS,"传出参数:" + output);
+        flushReports(extent,test);
     }
+
+    *//**失败写入日志**//*
+    public void fail(ExtentReports extent, String method, String input, String output, String description) {
+        ExtentTest test = getExtenTest(extent,method,description);
+        test.log(LogStatus.FAIL, "传入参数:"+ input);
+        test.log(LogStatus.FAIL,"传出参数:" + output);
+        flushReports(extent,test);
+        Assert.fail();
+    }
+
+    *//**写入错误日志**//*
+    public void error(ExtentReports extent, String method, String input, String output, String description) {
+        ExtentTest test = getExtenTest(extent,method,description);
+        test.log(LogStatus.ERROR, "传入参数:"+ input);
+        test.log(LogStatus.ERROR,"传出参数:" + output);
+        flushReports(extent,test);
+        Assert.fail();
+    }*/
 }

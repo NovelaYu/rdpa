@@ -1,12 +1,12 @@
 package com.yzw.rdpa.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yzw.rdpa.entity.DeliveryReceipt;
 import com.yzw.rdpa.entity.Sign;
+import com.yzw.rdpa.util.DateUtil;
 import com.yzw.rdpa.util.ObjectToString;
+import com.yzw.rdpa.util.ReportsUtil;
 import com.yzw.rdpa.util.SSLSocketClient;
 import okhttp3.*;
-import org.omg.CORBA.Environment;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,15 +17,15 @@ public class HttpService {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    /**传入form 表单**/
+    /**传入form 表单,post提交**/
     @Deprecated
-    public static Response exceHttp(Object object,String method) {
+    public static Response exceHttp(String url,Object object,String method) {
         Sign sign = Sign.getSign();
         sign.setMethod(method);
         OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(1000, TimeUnit.MILLISECONDS)
+                .readTimeout(5000, TimeUnit.MILLISECONDS)
+                .writeTimeout(5000, TimeUnit.MILLISECONDS)
                 /**配置**/
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
                 /**忽略验证证书**/
@@ -40,10 +40,10 @@ public class HttpService {
         form.add("timestamp",sign.getTimestamp());
         form.add("version",sign.getVersion());
         form.add("sign", ObjectToString.objcetToString(object,sign));
-        /**预发环境url**/
-        /*String url = "https://api.jc.yzw.cn:8081/open.api";*/
-        /**正式环境**/
-        String url = "https://api.jc.yzw.cn:8081/open.api";
+
+        /**将调用当前接口的开始时间记录到报告**/
+        ReportsUtil.log("开始调用http接口: " + DateUtil.getCurrentMilliSeconds());
+
         Request request = new Request.Builder()
                 .url(url)
                 .header("Content-Type","application/x-www-form-urlencoded")
@@ -58,26 +58,32 @@ public class HttpService {
              * 同步哦 new callback 执行回调
              * **/
             response = call.execute();
+
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            /**将调用当前接口的结束时间记录到报告**/
+            ReportsUtil.log("http接口调用结束: " + DateUtil.getCurrentMilliSeconds());
         }
         return response;
     }
 
 
-    /**传入json数据**/
-    public static Response exceJsonHttp(String json,String method,String url) {
+    /**传入json数据，post提交**/
+    public static Response exceJsonHttp(String json,String url) {
         OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(1000, TimeUnit.MILLISECONDS)
+                .readTimeout(2000, TimeUnit.MILLISECONDS)
+                .writeTimeout(2000, TimeUnit.MILLISECONDS)
                 /**配置**/
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
                 /**忽略验证证书**/
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                 .build();
-
         RequestBody body = RequestBody.create(JSON, json);
+        /**将调用当前接口的开始时间记录到报告**/
+        ReportsUtil.log("开始调用http接口: " + DateUtil.getCurrentMilliSeconds());
+
         Request request = new Request.Builder()
                 .url(url)
                 .header("Content-Type","application/x-www-form-urlencoded")
@@ -94,16 +100,19 @@ public class HttpService {
             response = call.execute();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            /**将调用当前接口的结束时间记录到报告**/
+            ReportsUtil.log("http接口调用结束: " + DateUtil.getCurrentMilliSeconds());
         }
         return response;
     }
 
-    /**传入From 表单数据**/
-    public static Response exceFromBodyHttp(HashMap<String,String> map, String method, String url) {
+    /**传入From 表单数据，post提交**/
+    public static Response exceFromBodyHttp(HashMap<String,String> map, String url) {
         OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(1000, TimeUnit.MILLISECONDS)
+                .readTimeout(2000, TimeUnit.MILLISECONDS)
+                .writeTimeout(2000, TimeUnit.MILLISECONDS)
                 /**配置**/
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
                 /**忽略验证证书**/
@@ -116,6 +125,9 @@ public class HttpService {
         for (String key : map.keySet()) {
             form.add(key,map.get(key));
         }
+
+        /**将调用当前接口的开始时间记录到报告**/
+        ReportsUtil.log("开始调用http接口: " + DateUtil.getCurrentMilliSeconds());
 
         Request request = new Request.Builder()
                 .url(url)
@@ -132,6 +144,9 @@ public class HttpService {
             response = call.execute();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            /**将调用当前接口的结束时间记录到报告**/
+            ReportsUtil.log("http接口调用结束: " + DateUtil.getCurrentMilliSeconds());
         }
         return response;
     }
