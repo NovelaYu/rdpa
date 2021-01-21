@@ -1,22 +1,5 @@
 package com.yzw.rdpa.util;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.testng.xml.XmlClass;
-import org.testng.xml.XmlInclude;
-import org.testng.xml.XmlSuite;
-import org.testng.xml.XmlTest;
-
-import java.io.File;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 // todo
 public class TestNgUtil {
