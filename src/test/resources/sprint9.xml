@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="套件1" verbose="1" >
+    <test name="sprint9ApiTest">
+        <packages>
+            <package name="com.yzw.zska.test.sprint9.*"></package>
+        </packages>
+    </test>
+
+  <!--  <test name="CreateUpdateCategoryApiTest">
+        <classes>
+            <class name="com.yzw.zska."></class>
+        </classes>
+    </test>
+
+    <test name="CreateUpdateProductsTest">
+        <classes>
+            <class name="com.yzw.rdpa.test.mroApi.CreateUpdateProductsTest"></class>
+        </classes>
+    </test>
+
+    <test name="GetProductSysNoTest">
+        <classes>
+            <class name="com.yzw.rdpa.test.mroApi.GetProductSysNoTest"></class>
+        </classes>
+    </test>-->
+
+    <listeners>
+        <!-- 监听生成测试报告 -->
+        <listener class-name="com.yzw.zska.listener.ExtentTestNGIReporterListener"></listener>
+    </listeners>
+</suite>

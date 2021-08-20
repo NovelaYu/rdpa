@@ -9,6 +9,6 @@
 
     <listeners>
         <!-- 监听生成测试报告 -->
-        <listener class-name="com.yzw.rdpa.listener.ExtentTestNGIReporterListener"></listener>
+        <listener class-name="com.yzw.zska.listener.ExtentTestNGIReporterListener"></listener>
     </listeners>
 </suite>
